@@ -34,17 +34,17 @@ const Booking = ({ user }) => {
   const [room, setRoom] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [timing, setTiming] = useState();
+  const [timing, setTiming] = useState([]);
   const handleDateChange = (newDate) => {
     setDate(newDate);
   };
 
   const handleSubmit = (e) => {
+    e.preventDefault();
     let day = date.getDay();
     let month = date.getMonth();
     let year = date.getFullYear();
     let newDate = day + "/" + month + "/" + year;
-    e.preventDefault();
     let formData = {
       employeeId: user.id,
       name: name,
@@ -54,21 +54,26 @@ const Booking = ({ user }) => {
       starttime: timing,
     };
     sendData(formData);
-    setDate("");
-    setRoom("");
-    setName("");
-    setDescription("");
-    setDescription("");
     // console.log(formData);
   };
   const handleTiming = (time) => {
-    setTiming(time);
+    setTiming((prevTime) => {
+      return [...prevTime, time];
+    });
   };
   const sendData = (data) => {
     axios
       .post("http://localhost:3001/create-booking", data)
       .then((res) => {
         console.log(res);
+        if (res.status === 200) {
+          alert("Inserted Successfully!!");
+          setDate(new Date());
+          setRoom("");
+          setName("");
+          setDescription("");
+          setTiming([]);
+        }
       })
       .catch((err) => {
         if (err.response) {
@@ -133,7 +138,12 @@ const Booking = ({ user }) => {
                 <Button key={index} time={time} onSelectTime={handleTiming} />
               );
             })}
-            <Button formButton="true" formText="book an appointment" />
+            <button
+              className="btn w-100 text-capitalize m-2 bg-danger text-light button"
+              type="submit"
+            >
+              book an appointment
+            </button>
           </form>
         </div>
       </div>

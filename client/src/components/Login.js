@@ -1,5 +1,4 @@
 import "./css/Login.css";
-import Button from "./UI/Button";
 import { useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
@@ -69,7 +68,9 @@ const Login = ({ userLoggedIn }) => {
             <label htmlFor="employee__password">Password</label>
           </div>
           <div className="my-3 d-flex justify-content-center">
-            <Button formButton="true" formText="sign in" />
+            <button className="btn w-100 text-capitalize m-2 bg-danger text-light button">
+              sign in
+            </button>
           </div>
         </form>
       </div>

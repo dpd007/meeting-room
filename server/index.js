@@ -8,6 +8,7 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 app.post("/getEmployee", (req, res) => {
+  // console.log(req.body);
   const email = req.body.email;
   const password = req.body.password;
   let sql = `SELECT * FROM employeedetails WHERE employeeEmail="${email}" AND employeePassword="${password}"`;
@@ -22,17 +23,18 @@ app.post("/getEmployee", (req, res) => {
 });
 
 app.post("/create-booking", (req, res) => {
+  // console.log(req.body);
   const employeeId = req.body.employeeId;
   const name = req.body.name;
   const description = req.body.description;
   const typeofroom = req.body.typeofroom;
   const date = req.body.date;
   const starttime = req.body.starttime;
-  let sql = `INSERT INTO meetingbooking (employeeId, name, description,typeofroom,date,starttime) VALUES("${employeeId}","${name}","${description}","${typeofroom}",STR_TO_DATE("${date}","%m/%d/%Y"),"${starttime}")`;
-  db.query(sql, (err, res) => {
-    if (err) throw err;
-    console.log("inserted");
-  });
+  for (let i = 0; i < starttime.length; i++) {
+    let sql = `INSERT INTO meetingbooking (employeeId, name, description,typeofroom,date,starttime) VALUES("${employeeId}","${name}","${description}","${typeofroom}",STR_TO_DATE("${date}","%m/%d/%Y"),"${starttime[i]}")`;
+    db.query(sql);
+  }
+  res.send(200);
 });
 app.listen(PORT, () => {
   console.log("server is running at port " + PORT);
