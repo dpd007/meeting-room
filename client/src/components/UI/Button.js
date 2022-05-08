@@ -1,12 +1,12 @@
-const Button = ({ time, formButton }) => {
+const Button = ({ time, formButton, formText }) => {
   let button;
   if (formButton) {
     button = (
       <button
-        className="btn w-100 text-capitalize m-2 bg-danger text-light"
+        className="btn w-100 text-capitalize m-2 bg-danger text-light button"
         type="submit"
       >
-        Book appointment
+        {formText}
       </button>
     );
   } else {
