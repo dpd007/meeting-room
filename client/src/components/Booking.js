@@ -54,6 +54,11 @@ const Booking = ({ user }) => {
       starttime: timing,
     };
     sendData(formData);
+    setDate("");
+    setRoom("");
+    setName("");
+    setDescription("");
+    setDescription("");
     // console.log(formData);
   };
   const handleTiming = (time) => {
