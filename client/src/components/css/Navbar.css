@@ -1,0 +1,8 @@
+nav .button {
+  color: #fff;
+  outline: 1px solid #fff;
+}
+nav .button:hover {
+  background-color: #fff;
+  color: red;
+}
