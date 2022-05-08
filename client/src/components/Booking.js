@@ -6,6 +6,7 @@ import Navbar from "./Navbar";
 import { useSelector } from "react-redux";
 import { Navigate } from "react-router-dom";
 import "./css/Booking.css";
+import axios from "axios";
 const times = [
   "10:00",
   "10:30",
@@ -30,10 +31,45 @@ const times = [
 const Booking = ({ user }) => {
   const isAuth = useSelector((state) => state.auth.isAuthenticated);
   const [date, setDate] = useState(new Date());
+  const [room, setRoom] = useState("");
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [timing, setTiming] = useState();
   const handleDateChange = (newDate) => {
     setDate(newDate);
-    console.log(newDate);
-    // console.log(newDate);
+  };
+
+  const handleSubmit = (e) => {
+    let day = date.getDay();
+    let month = date.getMonth();
+    let year = date.getFullYear();
+    let newDate = day + "/" + month + "/" + year;
+    e.preventDefault();
+    let formData = {
+      employeeId: user.id,
+      name: name,
+      description: description,
+      typeofroom: room,
+      date: newDate,
+      starttime: timing,
+    };
+    sendData(formData);
+    // console.log(formData);
+  };
+  const handleTiming = (time) => {
+    setTiming(time);
+  };
+  const sendData = (data) => {
+    axios
+      .post("http://localhost:3001/create-booking", data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        if (err.response) {
+          console.log(err.response);
+        }
+      });
   };
   if (isAuth === false) {
     return <Navigate to="/" />;
@@ -44,11 +80,12 @@ const Booking = ({ user }) => {
         <Navbar name={user.employeeName} />
         <div className="container w-50">
           <h2 className="text-center">Meeting Room Booking</h2>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="form-floating mb-3">
               <select
                 name="meeting__room__select"
-                id=""
+                value={room}
+                onChange={(e) => setRoom(e.target.value)}
                 className="form-control"
               >
                 <option value="Training Room">Training Room</option>
@@ -61,7 +98,8 @@ const Booking = ({ user }) => {
               <input
                 type="text"
                 name="name"
-                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
                 className="form-control"
                 placeholder="Enter your name"
               />
@@ -71,7 +109,8 @@ const Booking = ({ user }) => {
               <input
                 type="text"
                 name="description"
-                id="description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
                 className="form-control"
                 placeholder="Enter meeting description"
               />
@@ -83,10 +122,11 @@ const Booking = ({ user }) => {
                 value={date}
                 locale={"en-US"}
               />
-              {/* <input type="date" className="form-control" value={date} onChange={getDate} /> */}
             </div>
             {times.map((time, index) => {
-              return <Button key={index} time={time} />;
+              return (
+                <Button key={index} time={time} onSelectTime={handleTiming} />
+              );
             })}
             <Button formButton="true" formText="book an appointment" />
           </form>

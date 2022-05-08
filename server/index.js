@@ -20,6 +20,20 @@ app.post("/getEmployee", (req, res) => {
     }
   });
 });
+
+app.post("/create-booking", (req, res) => {
+  const employeeId = req.body.employeeId;
+  const name = req.body.name;
+  const description = req.body.description;
+  const typeofroom = req.body.typeofroom;
+  const date = req.body.date;
+  const starttime = req.body.starttime;
+  let sql = `INSERT INTO meetingbooking (employeeId, name, description,typeofroom,date,starttime) VALUES("${employeeId}","${name}","${description}","${typeofroom}",STR_TO_DATE("${date}","%m/%d/%Y"),"${starttime}")`;
+  db.query(sql, (err, res) => {
+    if (err) throw err;
+    console.log("inserted");
+  });
+});
 app.listen(PORT, () => {
   console.log("server is running at port " + PORT);
 });
